@@ -12,15 +12,6 @@ import feedparser
 from threading import Timer
 
 
-# Set variables
-"""
-title = ""
-description = ""
-dtEvent = ""
-titleAndDesc = ""
-guidNum = ""
-LocalGuidNum = ""
-"""
 
 # This function gets the RSS data and stores data into global variables
 def getData():
@@ -50,42 +41,52 @@ def getData():
     dtEvent = Entry.published
 
     # Combine Title and Description, set to lower
-    global titleAndDesc
-    LocalTitleAndDesc = title + description
-    titleAndDesc = LocalTitleAndDesc.lower()
-    print('PING')
+    try:
+        global titleAndDesc
+        LocalTitleAndDesc = title + description
+        titleAndDesc = LocalTitleAndDesc.lower()
+    except:
+        titleAndDesc = "N.A.V"
+
 
 
 # Validates the content having important/relevant locations
 def locationIsRelevant():
-    if "wijlre" in titleAndDesc or "valkenburg" in titleAndDesc: # It just looks or these cities are called in the feed
+    if "wijlre" in titleAndDesc or "valkenburg" in titleAndDesc: 
         return True
     else:
         return False
+
 
 
 # Looks for an updates GUID-value
 def checkForUpdate(number):
     global LocalGuidNum
 
-    if len(LocalGuidNum) == 0: # When there is no value, fill it up with the current GUID
+    if len(LocalGuidNum) == 0: 
         LocalGuidNum = number
-    if LocalGuidNum == number: # In case the current GUID is the same as the local: no new message
+    if LocalGuidNum == number: 
         return False
-    else: # In case the GUID and local number are different: new message! 
+    else:  
         LocalGuidNum == number
         return True
+
 
 
 # Just here to print the data
 def printIt():
     getData()
-    print("Loc relevant? ", locationIsRelevant(), '\n', title, '\n', description, '\n', dtEvent,'\n','\n')
-    # Delay
+    print("Loc relevant? ", locationIsRelevant(), '\n', "Titel:   " + title, '\n', "Beschrijving:   " + description, '\n', "Timestamp:   " + dtEvent,'\n','\n')
     Timer(30.0, printIt).start()
-
-
 
 # EXECUTE:
 printIt()
+
+
+
+#def showIt():
+#    getData()
+#    if checkForUpdate(guidNum):
+#        display.clear()
+#        display.text('Hellow World')
 
